@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { API_URL } from '../config';
 
 export const AUTH_REQUEST = 'AUTH_REQUEST';
@@ -21,19 +23,16 @@ export const authFail = reason => ({
 
 export const auth = googleToken => (dispatch) => {
   dispatch(authRequest());
-  fetch(`${API_URL}/auth/google`, {
-    method: 'POST',
-    body: JSON.stringify({
-      auth_token: googleToken,
-    }),
-  })
-    .then((r) => {
-      if (r.status === 200) {
-        return r.json().then(j => dispatch(authSuccess(j.auth_token, j.user)));
-      } else if (r.status === 401 || r.status === 500) {
-        return r.json().then(j => dispatch(authFail(j.error)));
+  axios
+    .post(`${API_URL}/auth/google`, { auth_token: googleToken })
+    .then(r => dispatch(authSuccess(r.data.auth_token, r.data.user)))
+    .catch((error) => {
+      if (error.response) {
+        dispatch(authFail(error.response.data.error));
+      } else if (error.request) {
+        dispatch(authFail('No response from server'));
+      } else {
+        dispatch(authFail(error.message));
       }
-      return Promise.reject();
-    })
-    .catch(() => dispatch(authFail('Unknown error')));
+    });
 };

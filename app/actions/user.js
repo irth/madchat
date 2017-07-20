@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import { API_URL } from '../config';
 
 import { authFail } from './auth';
@@ -13,29 +15,24 @@ export const setUser = user => ({
 });
 
 export const updateUserRequest = () => ({ type: UPDATE_USER_REQUEST });
-export const updateUserFail = error => ({ type: UPDATE_USER_FAIL, error });
+export const updateUserFail = (code, message) => ({
+  type: UPDATE_USER_FAIL,
+  error: { code, message },
+});
 
 export const updateUser = (authToken, user) => (dispatch) => {
   dispatch(updateUserRequest());
-  fetch(`${API_URL}/profile`, {
-    method: 'PATCH',
-    body: JSON.stringify({
-      auth_token: authToken,
-      ...user,
-    }),
-  })
-    .then((r) => {
-      if (r.status === 401) {
-        dispatch(authFail('Unauthorized.'));
+  axios
+    .patch(`${API_URL}/profile`, { auth_token: authToken, ...user })
+    .then(r => dispatch(setUser(r.data)))
+    .catch((error) => {
+      if (error.response) {
+        if (error.response.status === 401) dispatch(authFail(401, 'Unauthorized.'));
+        else dispatch(updateUserFail(error.response.status, error.response.data.error));
+      } else if (error.request) {
+        dispatch(updateUserFail(null, 'No response from server'));
       } else {
-        r
-          .json()
-          .then((j) => {
-            if (r.status !== 200) dispatch(updateUserFail({ code: r.status, message: j.error }));
-            else dispatch(setUser(j));
-          })
-          .catch(() => dispatch(updateUserFail({ code: r.status, error: 'Unknown error' })));
+        dispatch(updateUserFail(null, error.message));
       }
-    })
-    .catch(() => dispatch(updateUserFail({ code: null, error: 'Unknown error' })));
+    });
 };
