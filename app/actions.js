@@ -22,9 +22,10 @@ export const authRequest = () => ({
   type: AUTH_REQUEST,
 });
 
-export const authSuccess = token => ({
+export const authSuccess = (token, user) => ({
   type: AUTH_SUCCESS,
   token,
+  user,
 });
 
 export const authFail = reason => ({
@@ -42,7 +43,7 @@ export const auth = googleToken => (dispatch) => {
   })
     .then((r) => {
       if (r.status === 200) {
-        return r.json().then(j => dispatch(authSuccess(j.auth_token)));
+        return r.json().then(j => dispatch(authSuccess(j.auth_token, j.user)));
       } else if (r.status === 401 || r.status === 500) {
         return r.json().then(j => dispatch(authFail(j.error)));
       }
@@ -53,30 +54,39 @@ export const auth = googleToken => (dispatch) => {
 // ----------------------------------------------------------------------------
 
 // User info ------------------------------------------------------------------
-export const SET_USER_ID = 'SET_USER_ID';
-export const SET_USER_USERNAME = 'SET_USER_USERNAME';
-export const SET_USER_DISPLAY_NAME = 'SET_USER_DISPLAY_NAME';
-export const SET_USER_STATUS = 'SET_USER_STATUS';
+export const UPDATE_USER_REQUEST = 'UPDATE_USER_REQUEST';
+export const UPDATE_USER_FAIL = 'UPDATE_USER_FAIL';
 
-export const setUserId = id => ({
-  type: SET_USER_ID,
-  id,
+export const SET_USER = 'SET_USER';
+
+export const setUser = user => ({
+  type: SET_USER,
+  user,
 });
 
-export const setUsername = username => ({
-  type: SET_USER_USERNAME,
-  username,
-});
+export const updateUserRequest = () => ({ type: UPDATE_USER_REQUEST });
+export const updateUserFail = error => ({ type: UPDATE_USER_FAIL, error });
 
-export const setDisplayName = displayName => ({
-  type: SET_USER_DISPLAY_NAME,
-  displayName,
-});
-
-export const setStatus = status => ({
-  type: SET_USER_STATUS,
-  status,
-});
+export const updateUser = (authToken, user) => (dispatch) => {
+  dispatch(updateUserRequest());
+  fetch(`${API_URL}/profile`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      auth_token: authToken,
+      ...user,
+    }),
+  })
+    .then((r) => {
+      r
+        .json()
+        .then((j) => {
+          if (r.status !== 200) dispatch(updateUserFail({ code: r.status, message: j.error }));
+          else dispatch(setUser(j));
+        })
+        .catch(() => dispatch(updateUserFail({ code: r.status, error: 'Unknown error' })));
+    })
+    .catch(() => dispatch(updateUserFail({ code: null, error: 'Unknown error' })));
+};
 // ----------------------------------------------------------------------------
 
 // Fetch friends --------------------------------------------------------------

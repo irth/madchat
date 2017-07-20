@@ -5,7 +5,7 @@ import { auth, authFail } from '../actions';
 import Landing from '../components/Landing';
 
 const mapStateToProps = state => ({
-  loggingIn: state.auth.loggingIn,
+  loggingIn: state.auth.logging_in,
   error: state.auth.error,
 });
 

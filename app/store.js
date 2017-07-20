@@ -12,6 +12,6 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk), autoRehydrate()));
 
-export const persist = (s, cb) => persistStore(s, { whitelist: ['auth'] }, cb);
+export const persist = (s, cb) => persistStore(s, { whitelist: ['auth', 'user'] }, cb);
 
 export default store;
