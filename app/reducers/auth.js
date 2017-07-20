@@ -1,3 +1,4 @@
+import { REHYDRATE } from 'redux-persist/constants';
 import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAIL } from '../actions';
 
 const authInitialState = {
@@ -13,6 +14,8 @@ const auth = (state = authInitialState, action) => {
       return { ...state, token: action.token };
     case AUTH_FAIL:
       return { ...authInitialState, error: action.error };
+    case REHYDRATE:
+      return { ...authInitialState, token: action.payload.auth ? action.payload.auth.token : null };
     default:
       return state;
   }
