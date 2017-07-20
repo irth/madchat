@@ -1,10 +1,6 @@
-import {
-  SET_USER,
-  UPDATE_USER_REQUEST,
-  UPDATE_USER_FAIL,
-  AUTH_FAIL,
-  AUTH_SUCCESS,
-} from '../actions';
+import { SET_USER, UPDATE_USER_REQUEST, UPDATE_USER_FAIL } from '../actions/user';
+
+import { AUTH_FAIL, AUTH_SUCCESS } from '../actions/auth';
 
 const userInitialState = {
   display_name: '',

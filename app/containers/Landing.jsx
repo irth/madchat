@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { auth, authFail } from '../actions';
+import { auth, authFail } from '../actions/auth';
 
 import Landing from '../components/Landing';
 

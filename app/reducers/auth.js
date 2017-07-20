@@ -1,5 +1,5 @@
 import { REHYDRATE } from 'redux-persist/constants';
-import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAIL } from '../actions';
+import { AUTH_REQUEST, AUTH_SUCCESS, AUTH_FAIL } from '../actions/auth';
 
 const authInitialState = {
   token: null,

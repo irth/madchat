@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { updateUser } from '../actions';
+import { updateUser } from '../actions/user';
 
 import SetupDialog from '../components/SetupDialog';
 
