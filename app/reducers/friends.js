@@ -16,7 +16,7 @@ const friends = (state = friendsInitialState, action) => {
     case FETCH_FRIENDS_REQUEST:
       return { ...state, fetching: true };
     case FETCH_FRIENDS_SUCCESS:
-      return { ...state, fetching: false, list: action.list };
+      return { ...state, fetching: false, list: action.friends };
     case FETCH_FRIENDS_FAIL:
       return { ...state, fetching: false };
     case AUTH_FAIL:
