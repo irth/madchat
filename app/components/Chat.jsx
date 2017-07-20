@@ -3,7 +3,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import SetupDialog from '../containers/SetupDialog';
-// import FriendsList from './FriendsList';
+import FriendsList from '../containers/FriendsList';
 // import Conversation from './Conversation';
 
 const ChatLayout = glamorous.div({
@@ -16,8 +16,8 @@ export default () =>
   (<glamorous.Div height="100%">
     <SetupDialog />
     <ChatLayout>
-      {/* <FriendsList />
-      <glamorous.Div flex={2}>
+      <FriendsList />
+      {/*  <glamorous.Div flex={2}>
         <Conversation />
       </glamorous.Div>*/}
     </ChatLayout>
