@@ -5,7 +5,7 @@ import { css } from 'glamor';
 
 // import ChatBox from './ChatBox';
 
-const MessageDiv = glamorous.div(({ own, live }) => {
+const MessageDiv = glamorous.div(({ own, live, unsent }) => {
   let bg = '#ddd';
   if (own && !live) {
     bg = '#222';
@@ -19,6 +19,7 @@ const MessageDiv = glamorous.div(({ own, live }) => {
     background: bg,
     border: live ? 'dashed 1px black' : `solid 1px ${bg}`,
     color: own ? 'white' : 'black',
+    opacity: unsent ? 0.5 : 1,
     display: 'inline-block',
     margin: '0.2em .5em',
     maxWidth: '30em',
@@ -37,9 +38,9 @@ const containerStyle = css({
   overflowY: 'scroll',
 });
 
-const Message = ({ message, own }) =>
+const Message = ({ message, own, unsent }) =>
   (<glamorous.Div textAlign={own ? 'right' : 'left'}>
-    <MessageDiv own={own}>
+    <MessageDiv own={own} unsent={unsent}>
       {message}
     </MessageDiv>
   </glamorous.Div>);
@@ -48,7 +49,7 @@ export default ({ messages, unsentMessages, ownId, remoteInput }) =>
   (<div className={containerStyle}>
     {/* TODO: implement autoscroll */}
     {messages.map(m => <Message key={m.id} own={m.sender === ownId} message={m.message} />)}
-    {unsentMessages.map(m => <Message key={m.id} own message={m.message} />)}
+    {unsentMessages.map(m => <Message unsent key={m.id} own message={m.message} />)}
     {remoteInput.length > 0 &&
       <glamorous.Div key="remote" textAlign="left">
         <MessageDiv live>

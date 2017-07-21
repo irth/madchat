@@ -54,7 +54,6 @@ const conversationReducer = (state = conversationInitialState, action) => {
       return {
         ...state,
         unsent_messages: filter(state.unsent_messages, m => m.id !== action.id),
-        messages: sortBy([...action.messages, action.message], 'id'),
       };
     case SEND_MESSAGE_FAIL:
       return {

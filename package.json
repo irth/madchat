@@ -40,6 +40,7 @@
     "lodash.filter": "^4.6.0",
     "lodash.find": "^4.6.0",
     "lodash.sortby": "^4.7.0",
+    "lodash.uniqueid": "^4.0.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-google-login": "^2.9.2",

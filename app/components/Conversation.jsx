@@ -2,7 +2,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import Messages from '../containers/Messages';
-// import ChatInput from './ChatInput';
+import ChatInput from './ChatInput';
 
 const Wrapper = glamorous.div({
   display: 'flex',
@@ -41,20 +41,26 @@ const Title = glamorous.div({
   fontWeight: 400,
 });
 
-export default ({ friend }) =>
-  (friend != null
-    ? <Wrapper>
-      <Title>
-        {friend.display_name}
-      </Title>
-      <Messages id={friend.id} />
-      {/* <ChatInput
+export default ({ friend, sendMessage }) => {
+  if (friend != null) {
+    return (
+      <Wrapper>
+        <Title>
+          {friend.display_name}
+        </Title>
+        <Messages id={friend.id} />
+
+        <ChatInput
           onSubmit={(msg) => {
             if (msg.trim().length > 0) {
-              this.props.state.sendMessage(this.props.state.activeChat, msg);
+              sendMessage(msg);
             }
           }}
-          onChange={msg => this.props.state.setInput(this.props.state.activeChat, msg)}
-        />*/}
-    </Wrapper>
-    : <NoConversation />);
+        />
+      </Wrapper>
+    );
+  }
+  return <NoConversation />;
+};
+
+// onChange={msg => this.props.state.setInput(this.props.state.activeChat, msg)}
