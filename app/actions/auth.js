@@ -18,9 +18,9 @@ export const authSuccess = (token, user) => ({
   user,
 });
 
-export const authFail = reason => ({
+export const authFail = error => ({
   type: AUTH_FAIL,
-  reason,
+  error,
 });
 
 export const auth = googleToken => (dispatch) => {
