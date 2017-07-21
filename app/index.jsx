@@ -8,8 +8,13 @@ import App from './App';
 
 import { fetchFriends } from './actions/friends';
 
+import { fetchMessages } from './actions/conversations';
+
+window.f = fetchMessages;
+window.s = store;
 persist(store, () => {
-  store.dispatch(fetchFriends(store.getState().auth.token));
+  const token = store.getState().auth.token;
+  if (token != null) store.dispatch(fetchFriends(token));
 
   /*
    * Render only after hydration - avoids a bug where react-google-login is

@@ -4,7 +4,7 @@ import glamorous from 'glamorous';
 
 import SetupDialog from '../containers/SetupDialog';
 import FriendsList from '../containers/FriendsList';
-// import Conversation from './Conversation';
+import Conversation from '../containers/Conversation';
 
 const ChatLayout = glamorous.div({
   display: 'flex',
@@ -17,8 +17,8 @@ export default () =>
     <SetupDialog />
     <ChatLayout>
       <FriendsList />
-      {/*  <glamorous.Div flex={2}>
+      <glamorous.Div flex={2}>
         <Conversation />
-      </glamorous.Div>*/}
+      </glamorous.Div>
     </ChatLayout>
   </glamorous.Div>);

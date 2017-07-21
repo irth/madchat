@@ -1,6 +1,8 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+
 import { setActiveChat } from '../actions/active_chat';
+import { fetchMessages } from '../actions/conversations';
 
 import FriendsList from '../components/FriendsList';
 
@@ -9,10 +11,19 @@ const mapStateToProps = state => ({
   friends: state.friends.list,
   activeChat: state.active_chat,
   user: state.user,
+  authToken: state.auth.token,
 });
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ setActiveChat }, dispatch),
+  ...bindActionCreators({ setActiveChat, fetchMessages }, dispatch),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FriendsList);
+const mergeProps = (stateProps, dispatchProps) => ({
+  ...stateProps,
+  setActiveChat: (id) => {
+    dispatchProps.setActiveChat(id);
+    dispatchProps.fetchMessages(stateProps.authToken, id, 30);
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(FriendsList);
