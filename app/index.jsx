@@ -15,10 +15,8 @@ persist(store, () => {
   const token = store.getState().auth.token;
   if (token != null) store.dispatch(fetchFriends(token));
 
-  const sock = new SocketConnection(token);
+  const sock = new SocketConnection();
   connectSocketToStore(sock, store);
-
-  sock.connect();
 
   /*
    * Render only after hydration - avoids a bug where react-google-login is

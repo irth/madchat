@@ -1,7 +1,7 @@
 import { WS_URL } from '../config';
 
 export default class SocketConnection {
-  constructor(authToken) {
+  constructor(authToken = null) {
     this.sock = null;
     this.authToken = authToken;
     this.eventHandlers = {
@@ -32,11 +32,22 @@ export default class SocketConnection {
   }
 
   connect() {
+    if (this.sock != null) this.sock.close();
+    console.log('CONNECTIING, token:', this.authToken);
+    if (this.authToken == null) return;
     this.sock = new WebSocket(`${WS_URL}?auth_token=${this.authToken}`);
     const s = this.sock;
     s.onmessage = this.onSocketMessage.bind(this);
     s.onopen = this.onSocketOpen.bind(this);
     s.onerror = this.onSocketError.bind(this);
+  }
+
+  disconnect() {
+    this.sock.close();
+  }
+
+  setAuthToken(token) {
+    this.authToken = token;
   }
 
   onSocketOpen() {
