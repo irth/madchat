@@ -8,13 +8,17 @@ import App from './App';
 
 import { fetchFriends } from './actions/friends';
 
-import { fetchMessages } from './actions/conversations';
+import SocketConnection from './api/socket';
+import connectSocketToStore from './api/connectSocketToStore';
 
-window.f = fetchMessages;
-window.s = store;
 persist(store, () => {
   const token = store.getState().auth.token;
   if (token != null) store.dispatch(fetchFriends(token));
+
+  const sock = new SocketConnection(token);
+  connectSocketToStore(sock, store);
+
+  sock.connect();
 
   /*
    * Render only after hydration - avoids a bug where react-google-login is
