@@ -9,7 +9,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     messages: conversation.messages || [],
     unsentMessages: conversation.unsent_messages || [],
-    remoteInput: conversation.remote_input || '',
+    remoteInput: conversation.input || '',
     isFullyFetched: conversation.is_fully_fetched || false,
     ownId: state.user.id,
   };

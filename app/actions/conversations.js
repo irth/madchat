@@ -25,7 +25,8 @@ export const fetchMessagesFail = friend => ({
   friend,
 });
 
-export const fetchMessages = (authToken, friend, count = 10, before) => (dispatch) => {
+export const fetchMessages = (friend, count = 10, before) => (dispatch, getState) => {
+  const authToken = getState().auth.token;
   dispatch(fetchMessagesRequest(friend));
   let url = `${API_URL}/history?auth_token=${authToken}&friend=${friend}&count=${count}`;
   if (before != null) url += `&before=${before}`;
@@ -60,13 +61,15 @@ export const sendMessageFail = (friend, id) => ({
 });
 
 export const ADD_MESSAGE = 'ADD_MESSAGE';
-export const addMessage = (friend, message) => ({
+export const addMessage = (friend, message, discardInput = false) => ({
   type: ADD_MESSAGE,
   friend,
   message,
+  discardInput,
 });
 
-export const sendMessage = (authToken, friend, message) => (dispatch) => {
+export const sendMessage = (friend, message) => (dispatch, getState) => {
+  const authToken = getState().auth.token;
   const localId = uniqueId();
   dispatch(sendMessageRequest(friend, localId, message));
   axios
@@ -82,3 +85,12 @@ export const sendMessage = (authToken, friend, message) => (dispatch) => {
 };
 
 export const SET_INPUT = 'SET_INPUT';
+export const setInput = (friend, input) => ({
+  type: SET_INPUT,
+  friend,
+  input,
+});
+
+export const sendInput = (friend, input) => (dispatch, getState, { socket }) => {
+  socket.setInput(friend, input);
+};

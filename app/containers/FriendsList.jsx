@@ -11,7 +11,6 @@ const mapStateToProps = state => ({
   friends: state.friends.list,
   activeChat: state.active_chat,
   user: state.user,
-  authToken: state.auth.token,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -22,7 +21,7 @@ const mergeProps = (stateProps, dispatchProps) => ({
   ...stateProps,
   setActiveChat: (id) => {
     dispatchProps.setActiveChat(id);
-    dispatchProps.fetchMessages(stateProps.authToken, id, 30);
+    dispatchProps.fetchMessages(id, 30);
   },
 });
 

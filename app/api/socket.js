@@ -33,7 +33,6 @@ export default class SocketConnection {
 
   connect() {
     if (this.sock != null) this.sock.close();
-    console.log('CONNECTIING, token:', this.authToken);
     if (this.authToken == null) return;
     this.sock = new WebSocket(`${WS_URL}?auth_token=${this.authToken}`);
     const s = this.sock;
@@ -43,7 +42,7 @@ export default class SocketConnection {
   }
 
   disconnect() {
-    this.sock.close();
+    if (this.sock != null) this.sock.close();
   }
 
   setAuthToken(token) {

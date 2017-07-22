@@ -20,7 +20,8 @@ export const fetchFriendsFail = () => ({
   type: FETCH_FRIENDS_FAIL,
 });
 
-export const fetchFriends = authToken => (dispatch) => {
+export const fetchFriends = () => (dispatch, getState) => {
+  const authToken = getState().auth.token;
   dispatch(fetchFriendsRequest());
   axios
     .get(`${API_URL}/friends?auth_token=${authToken}`)

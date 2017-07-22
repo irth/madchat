@@ -41,7 +41,7 @@ const Title = glamorous.div({
   fontWeight: 400,
 });
 
-export default ({ friend, sendMessage }) => {
+export default ({ friend, sendMessage, sendInput }) => {
   if (friend != null) {
     return (
       <Wrapper>
@@ -49,13 +49,13 @@ export default ({ friend, sendMessage }) => {
           {friend.display_name}
         </Title>
         <Messages id={friend.id} />
-
         <ChatInput
           onSubmit={(msg) => {
             if (msg.trim().length > 0) {
               sendMessage(msg);
             }
           }}
+          onChange={value => sendInput(value)}
         />
       </Wrapper>
     );

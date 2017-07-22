@@ -20,7 +20,8 @@ export const updateUserFail = (code, message) => ({
   error: { code, message },
 });
 
-export const updateUser = (authToken, user) => (dispatch) => {
+export const updateUser = user => (dispatch, getState) => {
+  const authToken = getState().auth.token;
   dispatch(updateUserRequest());
   axios
     .patch(`${API_URL}/profile`, { auth_token: authToken, ...user })

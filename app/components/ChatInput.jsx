@@ -14,7 +14,6 @@ export default class ChatInput extends React.Component {
   clearInput() {
     this.setState({ input: '' });
     this.el.focus();
-    if (this.props.onChange != null) this.props.onChange(this.input);
   }
 
   render() {

@@ -73,6 +73,7 @@ const conversationReducer = (state = conversationInitialState, action) => {
           [...state.messages.filter(m => m.id !== action.message.id), action.message],
           'id',
         ),
+        input: action.discardInput ? '' : state.input,
       };
     case SET_INPUT:
       return {
