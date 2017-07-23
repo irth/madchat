@@ -1,10 +1,11 @@
 import { addMessage, setInput } from '../actions/conversations';
 import { connectionRequest, connectionSuccess, connectionFail } from '../actions/connection';
+import { updateStatus } from '../actions/friends';
 
 export default (socket, store) => {
   socket.on('connected', () => store.dispatch(connectionSuccess()));
   socket.on('connectionError', () => store.dispatch(connectionFail()));
-  // TODO: on statusUpdate
+  socket.on('statusUpdate', data => store.dispatch(updateStatus(data.id, data.status)));
   socket.on('inputBufferUpdate', data => store.dispatch(setInput(data.id, data.value)));
   socket.on('message', data => store.dispatch(addMessage(data.sender, data, true)));
 

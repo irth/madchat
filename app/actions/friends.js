@@ -31,3 +31,11 @@ export const fetchFriends = () => (dispatch, getState) => {
       else dispatch(fetchFriendsFail());
     });
 };
+
+export const UPDATE_STATUS = 'UPDATE_STATUS';
+
+export const updateStatus = (friend, status) => ({
+  type: UPDATE_STATUS,
+  friend,
+  status,
+});

@@ -2,6 +2,7 @@ import {
   FETCH_FRIENDS_REQUEST,
   FETCH_FRIENDS_SUCCESS,
   FETCH_FRIENDS_FAIL,
+  UPDATE_STATUS,
 } from '../actions/friends';
 
 import { AUTH_FAIL } from '../actions/auth';
@@ -19,6 +20,14 @@ const friends = (state = friendsInitialState, action) => {
       return { ...state, fetching: false, list: action.friends };
     case FETCH_FRIENDS_FAIL:
       return { ...state, fetching: false };
+    case UPDATE_STATUS:
+      return {
+        ...state,
+        list: state.list.map((friend) => {
+          if (friend.id !== action.friend) return friend;
+          return { ...friend, status: action.status };
+        }),
+      };
     case AUTH_FAIL:
       return friendsInitialState;
     default:
