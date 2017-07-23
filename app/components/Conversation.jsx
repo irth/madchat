@@ -70,5 +70,3 @@ export default class Conversation extends React.Component {
     return <NoConversation />;
   }
 }
-
-// onChange={msg => this.props.state.setInput(this.props.state.activeChat, msg)}
