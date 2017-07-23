@@ -4,20 +4,19 @@ import { connect } from 'react-redux';
 import find from 'lodash.find';
 
 import Conversation from '../components/Conversation';
-import { sendMessage, sendInput } from '../actions/conversations';
+import { sendMessage, sendInput, fetchMessages } from '../actions/conversations';
 
 const mapStateToProps = state => ({
   friend: find(state.friends.list, { id: state.active_chat }) || null,
 });
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ sendMessage, sendInput }, dispatch),
+  ...bindActionCreators({ sendMessage, sendInput, fetchMessages }, dispatch),
 });
 
 const mergeProps = (stateProps, dispatchProps) => ({
   friend: stateProps.friend,
   sendMessage: msg => dispatchProps.sendMessage(stateProps.friend.id, msg),
-
   sendInput: value => dispatchProps.sendInput(stateProps.friend.id, value),
 });
 

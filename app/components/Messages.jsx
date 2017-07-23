@@ -3,7 +3,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 import { css } from 'glamor';
 
-// import ChatBox from './ChatBox';
+import ChatBox from './ChatBox';
 
 const MessageDiv = glamorous.div(({ own, live, unsent }) => {
   let bg = '#ddd';
@@ -35,7 +35,6 @@ const containerStyle = css({
   padding: '.5em 0',
   margin: '0 .5em',
   borderBottom: 'solid 1px #ccc',
-  overflowY: 'scroll',
 });
 
 const Message = ({ message, own, unsent }) =>
@@ -45,15 +44,48 @@ const Message = ({ message, own, unsent }) =>
     </MessageDiv>
   </glamorous.Div>);
 
-export default ({ messages, unsentMessages, ownId, remoteInput }) =>
-  (<div className={containerStyle}>
-    {/* TODO: implement autoscroll */}
-    {messages.map(m => <Message key={m.id} own={m.sender === ownId} message={m.message} />)}
-    {unsentMessages.map(m => <Message unsent key={m.id} own message={m.message} />)}
-    {remoteInput.length > 0 &&
-      <glamorous.Div key="remote" textAlign="left">
-        <MessageDiv live>
-          {remoteInput}
-        </MessageDiv>
-      </glamorous.Div>}
-  </div>);
+export default class Messages extends React.Component {
+  state = {
+    autoscroll: true,
+  };
+
+  infiniteLoad() {
+    const { messages, fetchMessages } = this.props;
+    const before = messages[0] ? messages[0].timestamp : undefined;
+    fetchMessages(before);
+  }
+
+  render() {
+    const {
+      messages,
+      unsentMessages,
+      ownId,
+      remoteInput,
+      isFullyFetched,
+      fetching,
+      onSetAutoscroll,
+      autoscroll,
+    } = this.props;
+
+    return (
+      <ChatBox
+        className={containerStyle}
+        onInfiniteLoad={() => this.infiniteLoad()}
+        isFullyLoaded={isFullyFetched}
+        isLoading={fetching}
+        autoscroll={autoscroll}
+        onSetAutoscroll={onSetAutoscroll}
+      >
+        {/* TODO: implement autoscroll */}
+        {messages.map(m => <Message key={m.id} own={m.sender === ownId} message={m.message} />)}
+        {unsentMessages.map(m => <Message unsent key={m.id} own message={m.message} />)}
+        {remoteInput.length > 0 &&
+          <glamorous.Div key="remote" textAlign="left">
+            <MessageDiv live>
+              {remoteInput}
+            </MessageDiv>
+          </glamorous.Div>}
+      </ChatBox>
+    );
+  }
+}

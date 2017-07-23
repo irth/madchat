@@ -33,6 +33,7 @@ const conversationReducer = (state = conversationInitialState, action) => {
       return {
         ...state,
         fetching: false,
+        is_fully_fetched: action.messages.length === 0,
         messages: sortBy(
           [
             ...action.messages,

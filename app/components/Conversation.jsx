@@ -41,26 +41,34 @@ const Title = glamorous.div({
   fontWeight: 400,
 });
 
-export default ({ friend, sendMessage, sendInput }) => {
-  if (friend != null) {
-    return (
-      <Wrapper>
-        <Title>
-          {friend.display_name}
-        </Title>
-        <Messages id={friend.id} />
-        <ChatInput
-          onSubmit={(msg) => {
-            if (msg.trim().length > 0) {
-              sendMessage(msg);
-            }
-          }}
-          onChange={value => sendInput(value)}
-        />
-      </Wrapper>
-    );
+export default class Conversation extends React.Component {
+  state = { autoscroll: true };
+  render() {
+    const { friend, sendMessage, sendInput } = this.props;
+    if (friend != null) {
+      return (
+        <Wrapper>
+          <Title>
+            {friend.display_name}
+          </Title>
+          <Messages
+            id={friend.id}
+            autoscroll={this.state.autoscroll}
+            onSetAutoscroll={autoscroll => this.setState({ autoscroll })}
+          />
+          <ChatInput
+            onSubmit={(msg) => {
+              if (msg.trim().length > 0) {
+                this.setState({ autoscroll: true }, () => sendMessage(msg));
+              }
+            }}
+            onChange={value => sendInput(value)}
+          />
+        </Wrapper>
+      );
+    }
+    return <NoConversation />;
   }
-  return <NoConversation />;
-};
+}
 
 // onChange={msg => this.props.state.setInput(this.props.state.activeChat, msg)}
