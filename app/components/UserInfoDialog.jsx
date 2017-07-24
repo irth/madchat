@@ -45,29 +45,50 @@ const Label = glamorous.label({
 export default class SetupDialog extends React.Component {
   state = {
     displayName: this.props.displayName,
-    username: '',
+    username: this.props.username,
   };
 
   // TODO: implement save
 
   render() {
+    const firstTime = this.props.username == null;
     return (
-      this.props.username == null &&
-      <Dialog>
+      <Dialog
+        onOverlayClick={() => {
+          if (!firstTime) this.props.onClose();
+        }}
+      >
         <DialogContent>
-          <DialogTitle>Profile setup</DialogTitle>
-          <DialogSubtitle>
-            We need some information from you to finish setting up your profile.
-          </DialogSubtitle>
+          {!firstTime &&
+            <glamorous.Div
+              float="right"
+              lineHeight={0.5}
+              fontSize="125%"
+              cursor="pointer"
+              color="#999"
+              css={{ ':hover': { color: 'black' } }}
+              onClick={this.props.onClose}
+            >
+              &times;
+            </glamorous.Div>}
+          <DialogTitle>
+            {firstTime ? 'Profile setup' : 'Edit profile'}
+          </DialogTitle>
+          {firstTime
+            ? <DialogSubtitle>
+              <div>We need some information from you to finish setting up your profile.</div>
+              <div>(You can edit it later by clicking your own name, above the friend list.)</div>
+            </DialogSubtitle>
+            : <DialogSubtitle>Here you can edit your profile or log out</DialogSubtitle>}
           <div>
             <Label for="display_name">The name that others will see in their friends list:</Label>
             <Input
               id="display_name"
               placeholder="Display name"
+              value={this.state.displayName}
               onChange={(e) => {
                 this.setState({ displayName: e.target.value });
               }}
-              defaultValue={this.props.displayName}
             />
             <Label for="username">
               Your very own username that will allow your friends to find you:
@@ -78,6 +99,7 @@ export default class SetupDialog extends React.Component {
             <Input
               id="username"
               placeholder="Username"
+              value={this.state.username}
               onChange={(e) => {
                 this.setState({ username: e.target.value, error: null });
               }}
@@ -93,10 +115,12 @@ export default class SetupDialog extends React.Component {
           </DialogAction>
           <DialogAction
             onClick={() =>
-              this.props.updateUser({
-                username: this.state.username,
-                display_name: this.state.displayName,
-              })}
+              this.props
+                .updateUser({
+                  username: this.state.username,
+                  display_name: this.state.displayName,
+                })
+                .then(() => this.props.onClose(), () => {})}
           >
             Save
           </DialogAction>

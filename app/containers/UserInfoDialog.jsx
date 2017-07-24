@@ -1,9 +1,9 @@
-import { bindActionCreators } from 'redux';
+// import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { updateUser } from '../actions/user';
 
-import SetupDialog from '../components/SetupDialog';
+import UserInfoDialog from '../components/UserInfoDialog';
 
 const mapStateToProps = state => ({
   username: state.user.username,
@@ -13,9 +13,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  ...bindActionCreators({ updateUser }, dispatch),
+  updateUser: user => dispatch(updateUser(user)),
 });
 
 // TODO: add updateUser dispatch prop
 
-export default connect(mapStateToProps, mapDispatchToProps)(SetupDialog);
+export default connect(mapStateToProps, mapDispatchToProps)(UserInfoDialog);

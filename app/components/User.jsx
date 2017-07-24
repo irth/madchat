@@ -57,16 +57,22 @@ const ClickableStatus = glamorous.div(({ clickable }) => ({
   borderRadius: 2,
 }));
 
-export default ({ className, user, onClick, onClickStatus }) =>
-  (<div className={`${className} ${flex}`} {...(onClick != null ? { onClick, role: 'button' } : {})}>
-    <div>
+export default ({ className, user, onClick, onClickName, onClickStatus }) =>
+  (<div
+    className={`${className} ${flex}`}
+    {...(onClick != null ? { onClick, role: 'button', cursor: 'pointer' } : {})}
+  >
+    <glamorous.Div
+      role="button"
+      {...(onClickName != null ? { onClick: onClickName, role: 'button', cursor: 'pointer' } : {})}
+    >
       <DisplayName>
         {user.display_name}
       </DisplayName>
       <Username>
         @{user.username}
       </Username>
-    </div>
+    </glamorous.Div>
     <ClickableStatus clickable={onClickStatus != null} onClick={onClickStatus}>
       <Status status={user.status} />
     </ClickableStatus>

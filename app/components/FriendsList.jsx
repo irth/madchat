@@ -2,6 +2,7 @@ import React from 'react';
 import glamorous from 'glamorous';
 
 import User, { Status } from './User';
+import UserInfoDialog from '../containers/UserInfoDialog';
 import Dialog, { DialogContent, DialogTitle, DialogActions, DialogAction } from './Dialog';
 
 const Container = glamorous.div({
@@ -77,6 +78,7 @@ const StatusList = ({ onSelect }) =>
 export default class FriendsList extends React.Component {
   state = {
     statusDialog: false,
+    userInfoDialog: false,
     filter: '',
   };
 
@@ -93,6 +95,7 @@ export default class FriendsList extends React.Component {
       <Container>
         <Top>
           <User
+            onClickName={() => this.setState({ userInfoDialog: true })}
             onClickStatus={() => this.setState({ statusDialog: true })}
             user={this.props.user}
           />
@@ -110,6 +113,8 @@ export default class FriendsList extends React.Component {
                 </DialogAction>
               </DialogActions>
             </Dialog>}
+          {(this.state.userInfoDialog || this.props.user.username == null) &&
+            <UserInfoDialog onClose={() => this.setState({ userInfoDialog: false })} />}
           <Filter
             placeholder="search friends..."
             onChange={e => this.setState({ filter: e.target.value })}

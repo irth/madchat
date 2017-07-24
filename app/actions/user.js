@@ -23,9 +23,12 @@ export const updateUserFail = (code, message) => ({
 export const updateUser = user => (dispatch, getState) => {
   const authToken = getState().auth.token;
   dispatch(updateUserRequest());
-  axios
+  return axios
     .patch(`${API_URL}/profile`, { auth_token: authToken, ...user })
-    .then(r => dispatch(setUser(r.data)))
+    .then((r) => {
+      dispatch(setUser(r.data));
+      return Promise.resolve({ success: true });
+    })
     .catch((error) => {
       if (error.response) {
         if (error.response.status === 401) dispatch(authFail(401, 'Unauthorized.'));
@@ -35,5 +38,6 @@ export const updateUser = user => (dispatch, getState) => {
       } else {
         dispatch(updateUserFail(null, error.message));
       }
+      return Promise.resolve({ success: false });
     });
 };
