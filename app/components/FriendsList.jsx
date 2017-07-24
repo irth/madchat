@@ -9,6 +9,8 @@ const Container = glamorous.div({
   minWidth: '13em',
   background: '#333',
   color: 'white',
+  display: 'flex',
+  flexDirection: 'column',
 });
 
 const FriendsListUl = glamorous.ul({
@@ -75,6 +77,21 @@ const StatusList = ({ onSelect }) =>
     </StatusSelect>
   </DialogContent>);
 
+const AddFriendButton = glamorous.div({
+  padding: '10px',
+  background: '#222',
+  textAlign: 'center',
+  color: '#aaa',
+  cursor: 'pointer',
+  ':hover': {
+    color: 'white',
+  },
+});
+
+const AddFriendLabel = glamorous.span({
+  paddingLeft: '.4em',
+});
+
 export default class FriendsList extends React.Component {
   state = {
     statusDialog: false,
@@ -120,23 +137,31 @@ export default class FriendsList extends React.Component {
             onChange={e => this.setState({ filter: e.target.value })}
           />
         </Top>
-        {this.filterFriends().length > 0
-          ? <FriendsListUl>
-            {this.filterFriends().map(f =>
-                (<li key={f.id}>
-                  <Friend
-                    active={f.id === this.props.activeChat}
-                    onClick={() => this.props.setActiveChat(f.id)}
-                    user={f}
-                  />
-                </li>),
-              )}
-          </FriendsListUl>
-          : <glamorous.Div padding="1em">
-            {this.props.friends.length === 0
-                ? 'You have no friends yet :('
-                : 'No friends found...'}
-          </glamorous.Div>}
+        <glamorous.Div flex={2}>
+          {this.filterFriends().length > 0
+            ? <FriendsListUl>
+              {this.filterFriends().map(f =>
+                  (<li key={f.id}>
+                    <Friend
+                      active={f.id === this.props.activeChat}
+                      onClick={() => this.props.setActiveChat(f.id)}
+                      user={f}
+                    />
+                  </li>),
+                )}
+            </FriendsListUl>
+            : <glamorous.Div padding="1em">
+              {this.props.friends.length === 0
+                  ? 'You have no friends yet :('
+                  : 'No friends found...'}
+            </glamorous.Div>}
+        </glamorous.Div>
+        <AddFriendButton>
+          <span role="img" aria-label="Add">
+            &#10133;
+          </span>
+          <AddFriendLabel>add friend</AddFriendLabel>
+        </AddFriendButton>
       </Container>
     );
   }
